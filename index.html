@@ -1,408 +1,161 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b3028">
-  <meta name="description" content="Shivansh Tour & Travels - Airport transfers, Mumbai Darshan, local and outstation cab bookings.">
-  <title>Shivansh Tour & Travels | Reliable Cab Services</title>
-
+  <meta name="description" content="Shivansh Tour & Travels - Mumbai airport transfers, local travel and outstation cab services.">
+  <title>Shivansh Tour & Travels</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg site-nav">
+  <nav class="navbar navbar-expand-lg site-nav sticky-top">
     <div class="container">
-      <a class="navbar-brand brand" href="#home">
-        <span class="brand-mark">ST</span>
-        <span>
-          SHIVANSH
-          <small>TOUR &amp; TRAVELS</small>
-        </span>
-      </a>
-
-      <button class="navbar-toggler" type="button"
-        data-bs-toggle="collapse" data-bs-target="#mainNav"
-        aria-controls="mainNav" aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
+      <a class="navbar-brand brand" href="#home"><span class="brand-mark">ST</span><span>Shivansh <small>Tour & Travels</small></span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
       <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto align-items-lg-center">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
           <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#services">Our Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
           <li class="nav-item"><a class="nav-link" href="#fleet">Our Cars</a></li>
-          <li class="nav-item"><a class="nav-link" href="#packages">Packages</a></li>
-          <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-            <a class="btn btn-primary-custom nav-book" href="#booking">Book a Ride <span>↗</span></a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="#routes">Routes & Rates</a></li>
+          <li class="nav-item"><a class="nav-link" href="#reviews">Reviews</a></li>
+          <li class="nav-item"><a class="btn btn-primary-custom nav-cta" href="#booking">Book a Cab</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
+  <header class="hero" id="home">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <span class="eyebrow">YOUR JOURNEY, OUR PRIORITY</span>
+      <h1>Travel comfortably.<br><em>Arrive happily.</em></h1>
+      <p>Reliable cab services for Mumbai airport transfers, city travel and outstation journeys.</p>
+      <div class="d-flex flex-wrap gap-3">
+        <a class="btn btn-primary-custom btn-lg" href="#booking">Plan Your Trip <span aria-hidden="true">→</span></a>
+        <a class="btn btn-outline-light btn-lg" href="#fleet">Explore Our Cars</a>
+      </div>
+      <div class="hero-trust"><span>✓ Clean cars</span><span>✓ Professional drivers</span><span>✓ Easy booking enquiry</span></div>
+    </div>
+  </header>
+
+  <section class="quick-strip">
+    <div class="container quick-grid">
+      <a href="#routes"><span class="quick-icon">✈</span><span><strong>Airport Transfers</strong><small>Mumbai Airport pickup & drop</small></span></a>
+      <a href="#services"><span class="quick-icon">⌖</span><span><strong>Mumbai Darshan</strong><small>Explore the city comfortably</small></span></a>
+      <a href="#routes"><span class="quick-icon">↗</span><span><strong>Outstation Trips</strong><small>Pune, Satara, Goa & more</small></span></a>
+    </div>
+  </section>
+
   <main>
-    <!-- Hero -->
-    <section class="hero" id="home">
-      <div class="hero-overlay"></div>
-      <div class="container hero-content">
-        <div class="hero-copy">
-          <span class="eyebrow"><span class="eyebrow-dot"></span> YOUR JOURNEY, OUR PRIORITY</span>
-          <h1>Every Journey<br>Begins With <em>Comfort.</em></h1>
-          <p class="hero-description">
-            Travel comfortably with reliable cab services for airport transfers,
-            Mumbai Darshan, local travel and outstation trips.
-          </p>
-
-          <div class="hero-actions">
-            <a href="#booking" class="btn btn-primary-custom btn-lg">Book Your Ride <span>↗</span></a>
-            <a href="#services" class="btn btn-outline-light btn-lg">Explore Services</a>
-          </div>
-
-          <div class="hero-points">
-            <div><span class="point-check">✓</span> Comfortable Rides</div>
-            <div><span class="point-check">✓</span> Reliable Service</div>
-            <div><span class="point-check">✓</span> Easy Booking</div>
-          </div>
-        </div>
-      </div>
-      <a href="#quick-services" class="scroll-cue" aria-label="Scroll to services">↓</a>
-    </section>
-
-    <!-- Quick services -->
-    <section class="quick-services" id="quick-services">
+    <section class="section-pad" id="services">
       <div class="container">
-        <div class="row g-3">
-          <div class="col-12 col-md-4">
-            <a class="quick-item" href="#booking" data-service="Airport Drop & Pickup">
-              <span class="quick-icon">✈</span>
-              <span><strong>Airport Transfers</strong><small>Pickup &amp; drop made easy</small></span>
-              <span class="quick-arrow">↗</span>
-            </a>
-          </div>
-          <div class="col-12 col-md-4">
-            <a class="quick-item" href="#booking" data-service="Mumbai Darshan">
-              <span class="quick-icon">⌖</span>
-              <span><strong>Mumbai Darshan</strong><small>Explore the city in comfort</small></span>
-              <span class="quick-arrow">↗</span>
-            </a>
-          </div>
-          <div class="col-12 col-md-4">
-            <a class="quick-item" href="#booking" data-service="Outstation Trip">
-              <span class="quick-icon">➜</span>
-              <span><strong>Outstation Trips</strong><small>Travel beyond the city</small></span>
-              <span class="quick-arrow">↗</span>
-            </a>
-          </div>
+        <div class="section-heading text-center">
+          <span class="eyebrow">WHAT WE OFFER</span>
+          <h2>Travel made <em>simple</em></h2>
+          <p>Choose the ride that fits your plans. For routes without a listed price, send an enquiry and our team will contact you.</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4"><article class="service-card h-100"><div class="service-icon">✈</div><h3>Airport Pickup & Drop</h3><p>Convenient transfers to and from Mumbai airport for individuals and families.</p><a href="#routes" class="text-link">View airport rates →</a></article></div>
+          <div class="col-md-4"><article class="service-card h-100"><div class="service-icon">⌖</div><h3>Mumbai Darshan</h3><p>Explore Mumbai landmarks and local destinations at your own pace.</p><a href="#booking" class="text-link" data-service="Mumbai Darshan">Enquire now →</a></article></div>
+          <div class="col-md-4"><article class="service-card h-100"><div class="service-icon">↗</div><h3>Outstation Travel</h3><p>Plan intercity journeys with a suitable car for your group and luggage.</p><a href="#booking" class="text-link" data-service="Outstation Trip">Request a quote →</a></article></div>
         </div>
       </div>
     </section>
 
-    <!-- Services -->
-    <section class="section-padding" id="services">
+    <section class="section-pad section-soft" id="fleet">
       <div class="container">
         <div class="section-heading">
-          <span class="section-kicker">WHAT WE OFFER</span>
-          <h2>Travel Made <em>Simple.</em></h2>
-          <p>Thoughtful travel services for your everyday journeys and special plans.</p>
+          <span class="eyebrow">OUR FLEET</span>
+          <h2>Choose your <em>ride</em></h2>
+          <p>Choose a car to pre-fill it in the booking enquiry. Images are illustrative; actual vehicle availability will be confirmed by the owner.</p>
         </div>
-
         <div class="row g-4">
-          <div class="col-12 col-md-6 col-lg-4">
-            <article class="service-card">
-              <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=85" alt="Passenger airplane at an airport" loading="lazy">
-              <div class="service-card-body">
-                <span class="card-number">01 / AIRPORT</span>
-                <h3>Airport Drop &amp; Pickup</h3>
-                <p>Plan a smooth airport transfer from Mumbai, Thane and nearby locations.</p>
-                <a href="#booking" class="text-link" data-service="Airport Drop & Pickup">Book Airport Transfer <span>→</span></a>
-              </div>
-            </article>
-          </div>
-
-          <div class="col-12 col-md-6 col-lg-4">
-            <article class="service-card">
-              <img src="https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=900&q=85" alt="Mumbai city skyline" loading="lazy">
-              <div class="service-card-body">
-                <span class="card-number">02 / CITY TOUR</span>
-                <h3>Mumbai Darshan</h3>
-                <p>Discover Mumbai's famous attractions with a convenient private cab.</p>
-                <a href="#booking" class="text-link" data-service="Mumbai Darshan">Plan Your City Tour <span>→</span></a>
-              </div>
-            </article>
-          </div>
-
-          <div class="col-12 col-md-6 col-lg-4">
-            <article class="service-card">
-              <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85" alt="Mountain landscape for an outstation journey" loading="lazy">
-              <div class="service-card-body">
-                <span class="card-number">03 / OUTSTATION</span>
-                <h3>Outstation Travel</h3>
-                <p>Make your family trips, weekend getaways and long-distance journeys easier.</p>
-                <a href="#booking" class="text-link" data-service="Outstation Trip">Plan Your Trip <span>→</span></a>
-              </div>
-            </article>
-          </div>
+          <div class="col-sm-6 col-lg-3"><article class="car-card h-100"><img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=800&q=85" alt="WagonR car" loading="lazy"><div class="car-body"><div class="car-title-row"><h3>WagonR</h3><span class="car-capacity">4 seats</span></div><p>Comfortable everyday travel</p><div class="car-price">Airport transfer <strong>₹1,200</strong></div><button class="btn btn-outline-custom w-100 choose-car" type="button" data-car="WagonR">Choose WagonR</button></div></article></div>
+          <div class="col-sm-6 col-lg-3"><article class="car-card h-100"><img src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=800&q=85" alt="Family MPV similar to Ertiga" loading="lazy"><div class="car-body"><div class="car-title-row"><h3>Ertiga</h3><span class="car-capacity">6–7 seats</span></div><p>Extra room for family trips</p><div class="car-price">Airport transfer <strong>₹1,800</strong></div><button class="btn btn-outline-custom w-100 choose-car" type="button" data-car="Ertiga">Choose Ertiga</button></div></article></div>
+          <div class="col-sm-6 col-lg-3"><article class="car-card h-100"><img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=85" alt="Innova-style MPV" loading="lazy"><div class="car-body"><div class="car-title-row"><h3>Innova</h3><span class="car-capacity">6–7 seats</span></div><p>Comfort for longer journeys</p><div class="car-price">Airport transfer <strong>₹2,500</strong></div><button class="btn btn-outline-custom w-100 choose-car" type="button" data-car="Innova">Choose Innova</button></div></article></div>
+          <div class="col-sm-6 col-lg-3"><article class="car-card h-100"><img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=800&q=85" alt="Premium car for Innova Crysta category" loading="lazy"><div class="car-body"><div class="car-title-row"><h3>Innova Crysta</h3><span class="car-capacity">6–7 seats</span></div><p>Premium comfort for your trip</p><div class="car-price">Airport transfer <strong>₹3,000</strong></div><button class="btn btn-outline-custom w-100 choose-car" type="button" data-car="Innova Crysta">Choose Crysta</button></div></article></div>
         </div>
+        <p class="small-note mt-3">Airport rates shown above are the supplied rates. Other routes, extra stops, waiting, tolls or special requirements may need a separate quote from the owner.</p>
       </div>
     </section>
 
-    <!-- Fleet -->
-    <section class="fleet-section section-padding" id="fleet">
+    <section class="section-pad" id="routes">
       <div class="container">
-        <div class="section-heading">
-          <span class="section-kicker">OUR FLEET</span>
-          <h2>Choose Your <em>Comfort.</em></h2>
-          <p>Choose a vehicle that suits your group and travel plans.</p>
+        <div class="section-heading text-center">
+          <span class="eyebrow">POPULAR JOURNEYS</span>
+          <h2>Routes & <em>airport rates</em></h2>
+          <p>Only the airport rates supplied to us are displayed here. For other routes, request a quote and the owner will contact you.</p>
         </div>
-
-        <div class="row g-4">
-          <div class="col-12 col-sm-6 col-lg-3">
-            <article class="car-card">
-              <div class="car-image">
-                <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=700&q=85" alt="Sedan car" loading="lazy">
-                <span class="car-tag">EVERYDAY COMFORT</span>
-              </div>
-              <div class="car-info">
-                <h3>Sedan</h3>
-                <p>Ideal for city rides and airport transfers.</p>
-                <div class="car-bottom"><span>Comfortable ride</span><button type="button" class="choose-car" data-car="Sedan">Choose →</button></div>
-              </div>
-            </article>
-          </div>
-
-          <div class="col-12 col-sm-6 col-lg-3">
-            <article class="car-card">
-              <div class="car-image">
-                <img src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=700&q=85" alt="Family SUV" loading="lazy">
-                <span class="car-tag">FAMILY FAVOURITE</span>
-              </div>
-              <div class="car-info">
-                <h3>Ertiga</h3>
-                <p>A practical choice for family travel.</p>
-                <div class="car-bottom"><span>Family friendly</span><button type="button" class="choose-car" data-car="Ertiga">Choose →</button></div>
-              </div>
-            </article>
-          </div>
-
-          <div class="col-12 col-sm-6 col-lg-3">
-            <article class="car-card">
-              <div class="car-image">
-                <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=700&q=85" alt="Innova-style passenger vehicle" loading="lazy">
-                <span class="car-tag">EXTRA SPACE</span>
-              </div>
-              <div class="car-info">
-                <h3>Innova</h3>
-                <p>Room for comfortable group journeys.</p>
-                <div class="car-bottom"><span>Group travel</span><button type="button" class="choose-car" data-car="Innova">Choose →</button></div>
-              </div>
-            </article>
-          </div>
-
-          <div class="col-12 col-sm-6 col-lg-3">
-            <article class="car-card">
-              <div class="car-image">
-                <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=700&q=85" alt="Premium car on the road" loading="lazy">
-                <span class="car-tag">PREMIUM TRAVEL</span>
-              </div>
-              <div class="car-info">
-                <h3>Innova Crysta</h3>
-                <p>A premium option for longer journeys.</p>
-                <div class="car-bottom"><span>Premium comfort</span><button type="button" class="choose-car" data-car="Innova Crysta">Choose →</button></div>
-              </div>
-            </article>
-          </div>
+        <div class="row g-4 align-items-stretch">
+          <div class="col-lg-5"><article class="route-feature h-100"><span class="route-label">AIRPORT TRANSFERS</span><h3>Mumbai Airport</h3><p>Pickup or drop to/from Mumbai Airport. Choose a vehicle below to see the listed rate.</p><div class="airport-rate-list"><div><span>WagonR</span><strong>₹1,200</strong></div><div><span>Ertiga</span><strong>₹1,800</strong></div><div><span>Innova</span><strong>₹2,500</strong></div><div><span>Innova Crysta</span><strong>₹3,000</strong></div></div><button type="button" class="btn btn-primary-custom mt-3" data-service="Airport Drop & Pickup" data-scroll-booking>Enquire about airport transfer →</button></article></div>
+          <div class="col-lg-7"><div class="row g-3 h-100">
+            <div class="col-md-6"><article class="route-card h-100"><span class="route-icon">↗</span><h3>Mumbai → Pune</h3><p>Outstation transfer</p><span class="quote-tag">Get a quote</span><button type="button" class="btn btn-outline-custom w-100 mt-3" data-route="Mumbai to Pune">Ask for price</button></article></div>
+            <div class="col-md-6"><article class="route-card h-100"><span class="route-icon">↗</span><h3>Pune → Satara → Karad</h3><p>Intercity travel</p><span class="quote-tag">Get a quote</span><button type="button" class="btn btn-outline-custom w-100 mt-3" data-route="Pune to Satara to Karad">Ask for price</button></article></div>
+            <div class="col-md-6"><article class="route-card h-100"><span class="route-icon">↗</span><h3>Sangli & Kolhapur</h3><p>Outstation pickup/drop</p><span class="quote-tag">Get a quote</span><button type="button" class="btn btn-outline-custom w-100 mt-3" data-route="Sangli / Kolhapur">Ask for price</button></article></div>
+            <div class="col-md-6"><article class="route-card h-100"><span class="route-icon">🌴</span><h3>Goa</h3><p>Plan your Goa journey</p><span class="quote-tag">Get a quote</span><button type="button" class="btn btn-outline-custom w-100 mt-3" data-route="Goa">Ask for price</button></article></div>
+          </div></div>
         </div>
       </div>
     </section>
 
-    <!-- Packages -->
-    <section class="section-padding" id="packages">
+    <section class="section-pad section-soft" id="booking">
       <div class="container">
-        <div class="section-heading">
-          <span class="section-kicker">TRAVEL YOUR WAY</span>
-          <h2>Popular <em>Travel Plans.</em></h2>
-          <p>Tell us where you're going and we'll help you plan your ride.</p>
-        </div>
-
-        <div class="row g-4">
-          <div class="col-12 col-md-4">
-            <article class="package-card">
-              <span class="package-icon">✈</span>
-              <span class="section-kicker">QUICK &amp; CONVENIENT</span>
-              <h3>Airport Transfer</h3>
-              <p>Pickup or drop-off for your airport journey.</p>
-              <button type="button" class="btn btn-outline-custom" data-service="Airport Drop & Pickup">Enquire Now ↗</button>
-            </article>
-          </div>
-          <div class="col-12 col-md-4">
-            <article class="package-card featured-package">
-              <span class="package-icon">⌖</span>
-              <span class="section-kicker">EXPLORE THE CITY</span>
-              <h3>Mumbai Darshan</h3>
-              <p>Discover popular Mumbai landmarks at your pace.</p>
-              <button type="button" class="btn btn-primary-custom" data-service="Mumbai Darshan">Enquire Now ↗</button>
-            </article>
-          </div>
-          <div class="col-12 col-md-4">
-            <article class="package-card">
-              <span class="package-icon">➜</span>
-              <span class="section-kicker">GO A LITTLE FURTHER</span>
-              <h3>Outstation Trip</h3>
-              <p>Plan your next trip with a vehicle that suits you.</p>
-              <button type="button" class="btn btn-outline-custom" data-service="Outstation Trip">Enquire Now ↗</button>
-            </article>
-          </div>
+        <div class="row g-5 align-items-start">
+          <div class="col-lg-5 booking-intro"><span class="eyebrow">LET'S GET YOU MOVING</span><h2>Plan your next <em>journey</em></h2><p>Share a few details and submit your enquiry. Your details will be sent to our booking team so they can contact you to confirm availability and pricing.</p><div class="booking-promise"><span>✓</span><div><strong>Simple enquiry</strong><small>No online payment required</small></div></div><div class="booking-promise"><span>✓</span><div><strong>Price confirmation</strong><small>Owner will confirm details for routes without a listed rate</small></div></div></div>
+          <div class="col-lg-7"><form id="bookingForm" class="form-card">
+            <h3>Booking enquiry</h3><p class="form-subtitle">Fields marked * are required.</p>
+            <div class="row g-3">
+              <div class="col-md-6"><label for="fullName" class="form-label">Full name *</label><input id="fullName" name="fullName" class="form-control" type="text" placeholder="Your name" autocomplete="name" required maxlength="100"></div>
+              <div class="col-md-6"><label for="phone" class="form-label">Mobile number *</label><input id="phone" name="phone" class="form-control" type="tel" placeholder="Your contact number" autocomplete="tel" required pattern="[0-9+\s()-]{10,18}" maxlength="18"></div>
+              <div class="col-md-6"><label for="service" class="form-label">Service *</label><select id="service" name="service" class="form-select" required><option value="">Choose service</option><option>Airport Drop & Pickup</option><option>Mumbai Darshan</option><option>Outstation Trip</option><option>Local Travel</option></select></div>
+              <div class="col-md-6"><label for="car" class="form-label">Preferred car</label><select id="car" name="car" class="form-select"><option value="">Any suitable car</option><option>WagonR</option><option>Ertiga</option><option>Innova</option><option>Innova Crysta</option></select></div>
+              <div class="col-md-6"><label for="travelDate" class="form-label">Travel date *</label><input id="travelDate" name="travelDate" class="form-control" type="date" required></div>
+              <div class="col-md-6"><label for="passengers" class="form-label">Passengers *</label><select id="passengers" name="passengers" class="form-select" required><option value="">Select passengers</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select></div>
+              <div class="col-md-6"><label for="pickup" class="form-label">Pickup location *</label><input id="pickup" name="pickup" class="form-control" type="text" placeholder="Pickup address / area" required maxlength="200"></div>
+              <div class="col-md-6"><label for="destination" class="form-label">Destination *</label><input id="destination" name="destination" class="form-control" type="text" placeholder="Where are you going?" required maxlength="200"></div>
+              <div class="col-12"><label for="notes" class="form-label">Additional details</label><textarea id="notes" name="notes" class="form-control" rows="3" placeholder="Return trip, luggage, stops, flight details, etc." maxlength="1000"></textarea></div>
+              <div class="col-12"><button class="btn btn-primary-custom btn-lg w-100" type="submit">Submit booking enquiry <span aria-hidden="true">→</span></button><p class="privacy-note">Submitting this form sends your enquiry details to the travel team. It does not confirm a booking.</p><div class="form-status" id="bookingStatus" role="status" aria-live="polite"></div></div>
+            </div>
+          </form></div>
         </div>
       </div>
     </section>
 
-    <!-- Booking form -->
-    <section class="booking-section section-padding" id="booking">
+    <section class="section-pad" id="reviews">
       <div class="container">
-        <div class="row align-items-start g-5">
-          <div class="col-12 col-lg-5 booking-intro">
-            <span class="section-kicker">LET'S GET YOU THERE</span>
-            <h2>Your Next Journey<br>Starts <em>Right Here.</em></h2>
-            <p>Share your travel details in the form. We'll receive your enquiry and contact you to discuss your trip.</p>
-
-            <div class="booking-benefit">
-              <span>01</span><div><strong>Tell us your plan</strong><small>Fill in your journey details.</small></div>
+        <div class="section-heading text-center"><span class="eyebrow">CUSTOMER EXPERIENCES</span><h2>Your feedback <em>matters</em></h2><p>Tell us about your journey. Reviews are checked before they are displayed publicly.</p></div>
+        <div class="row g-4 align-items-start">
+          <div class="col-lg-5"><form id="feedbackForm" class="form-card">
+            <h3>Share your experience</h3><p class="form-subtitle">Please rate your trip honestly.</p>
+            <div class="mb-3"><label for="reviewName" class="form-label">Your name *</label><input id="reviewName" class="form-control" type="text" required maxlength="100" placeholder="Your name"></div>
+            <div class="mb-3"><label for="reviewDate" class="form-label">Travel date *</label><input id="reviewDate" class="form-control" type="date" required></div>
+            <div class="mb-3"><label for="reviewRoute" class="form-label">Route *</label><input id="reviewRoute" class="form-control" type="text" required maxlength="200" placeholder="e.g. Mumbai Airport to Pune"></div>
+            <div class="mb-3"><label for="reviewCar" class="form-label">Car used *</label><select id="reviewCar" class="form-select" required><option value="">Choose car</option><option>WagonR</option><option>Ertiga</option><option>Innova</option><option>Innova Crysta</option><option>Other</option></select></div>
+            <div class="rating-fields">
+              <div class="rating-row"><label for="driverRating">Driver behaviour *</label><select id="driverRating" class="form-select" required><option value="">Rate</option><option value="5">★★★★★ — Excellent (5)</option><option value="4">★★★★ — Good (4)</option><option value="3">★★★ — Average (3)</option><option value="2">★★ — Poor (2)</option><option value="1">★ — Very poor (1)</option></select></div>
+              <div class="rating-row"><label for="safetyRating">Safe driving *</label><select id="safetyRating" class="form-select" required><option value="">Rate</option><option value="5">★★★★★ — Excellent (5)</option><option value="4">★★★★ — Good (4)</option><option value="3">★★★ — Average (3)</option><option value="2">★★ — Poor (2)</option><option value="1">★ — Very poor (1)</option></select></div>
+              <div class="rating-row"><label for="punctualityRating">Punctuality *</label><select id="punctualityRating" class="form-select" required><option value="">Rate</option><option value="5">★★★★★ — Excellent (5)</option><option value="4">★★★★ — Good (4)</option><option value="3">★★★ — Average (3)</option><option value="2">★★ — Poor (2)</option><option value="1">★ — Very poor (1)</option></select></div>
+              <div class="rating-row"><label for="cleanlinessRating">Car cleanliness *</label><select id="cleanlinessRating" class="form-select" required><option value="">Rate</option><option value="5">★★★★★ — Excellent (5)</option><option value="4">★★★★ — Good (4)</option><option value="3">★★★ — Average (3)</option><option value="2">★★ — Poor (2)</option><option value="1">★ — Very poor (1)</option></select></div>
+              <div class="rating-row"><label for="overallRating">Overall experience *</label><select id="overallRating" class="form-select" required><option value="">Rate</option><option value="5">★★★★★ — Excellent (5)</option><option value="4">★★★★ — Good (4)</option><option value="3">★★★ — Average (3)</option><option value="2">★★ — Poor (2)</option><option value="1">★ — Very poor (1)</option></select></div>
             </div>
-            <div class="booking-benefit">
-              <span>02</span><div><strong>We receive your enquiry</strong><small>Your details are sent for processing.</small></div>
-            </div>
-            <div class="booking-benefit">
-              <span>03</span><div><strong>Confirm your journey</strong><small>We'll get in touch about your request.</small></div>
-            </div>
-          </div>
-
-          <div class="col-12 col-lg-7">
-            <form id="bookingForm" class="booking-form">
-              <div class="form-heading">
-                <div><span class="section-kicker">BOOKING ENQUIRY</span><h3>Plan Your Ride</h3></div>
-                <span class="form-step">YOUR DETAILS</span>
-              </div>
-
-              <div class="row g-3">
-                <div class="col-12 col-md-6">
-                  <label for="fullName" class="form-label">Full Name *</label>
-                  <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter your name" autocomplete="name" required maxlength="100">
-                </div>
-                <div class="col-12 col-md-6">
-                  <label for="phone" class="form-label">Phone Number *</label>
-                  <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter phone number" autocomplete="tel" inputmode="tel" pattern="[+]?[0-9 ()-]{10,16}" required maxlength="16">
-                </div>
-                <div class="col-12 col-md-6">
-                  <label for="service" class="form-label">Service Required *</label>
-                  <select class="form-select" id="service" name="service" required>
-                    <option value="">Select a service</option>
-                    <option value="Airport Drop & Pickup">Airport Drop &amp; Pickup</option>
-                    <option value="Mumbai Darshan">Mumbai Darshan</option>
-                    <option value="Outstation Trip">Outstation Trip</option>
-                    <option value="Local Travel">Local Travel</option>
-                  </select>
-                </div>
-                <div class="col-12 col-md-6">
-                  <label for="car" class="form-label">Preferred Car</label>
-                  <select class="form-select" id="car" name="car">
-                    <option value="">Any suitable car</option>
-                    <option value="Sedan">Sedan</option>
-                    <option value="Ertiga">Ertiga</option>
-                    <option value="Innova">Innova</option>
-                    <option value="Innova Crysta">Innova Crysta</option>
-                  </select>
-                </div>
-                <div class="col-12 col-md-6">
-                  <label for="travelDate" class="form-label">Travel Date *</label>
-                  <input type="date" class="form-control" id="travelDate" name="travelDate" required>
-                </div>
-                <div class="col-12 col-md-6">
-                  <label for="passengers" class="form-label">Number of Passengers *</label>
-                  <select class="form-select" id="passengers" name="passengers" required>
-                    <option value="">Select passengers</option>
-                    <option value="1">1 passenger</option>
-                    <option value="2">2 passengers</option>
-                    <option value="3">3 passengers</option>
-                    <option value="4">4 passengers</option>
-                    <option value="5">5 passengers</option>
-                    <option value="6">6 passengers</option>
-                    <option value="7">7 passengers</option>
-                    <option value="8+">8+ passengers</option>
-                  </select>
-                </div>
-                <div class="col-12">
-                  <label for="pickup" class="form-label">Pickup Location *</label>
-                  <input type="text" class="form-control" id="pickup" name="pickup" placeholder="Where should we pick you up?" required maxlength="250">
-                </div>
-                <div class="col-12">
-                  <label for="destination" class="form-label">Destination</label>
-                  <input type="text" class="form-control" id="destination" name="destination" placeholder="Where are you travelling to?" maxlength="250">
-                </div>
-                <div class="col-12">
-                  <label for="notes" class="form-label">Additional Details</label>
-                  <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Any special requests? (optional)" maxlength="1000"></textarea>
-                </div>
-                <div class="col-12">
-                  <button type="submit" class="btn btn-primary-custom submit-btn">Submit Booking Enquiry <span>↗</span></button>
-                  <p class="form-disclaimer">Your booking enquiry will be submitted for processing. We will contact you about your request.</p>
-                </div>
-              </div>
-            </form>
-          </div>
+            <div class="mt-3"><label for="reviewText" class="form-label">Your feedback *</label><textarea id="reviewText" class="form-control" rows="4" required maxlength="1500" placeholder="Share details about your experience..."></textarea></div>
+            <button class="btn btn-primary-custom w-100 mt-3" type="submit">Submit feedback</button>
+            <p class="privacy-note">Your feedback is submitted for review. It will not appear publicly until approved.</p>
+            <div class="form-status" id="feedbackStatus" role="status" aria-live="polite"></div>
+          </form></div>
+          <div class="col-lg-7"><div class="reviews-panel"><div class="reviews-panel-heading"><div><span class="eyebrow">REAL FEEDBACK</span><h3>What customers say</h3></div><span class="review-badge">Approved reviews</span></div><div id="reviewsList" class="reviews-list"><div class="empty-reviews"><span>✦</span><h4>Customer reviews will appear here</h4><p>Only genuine feedback approved by the owner will be shown. No sample or made-up reviews are displayed.</p></div></div><button type="button" class="btn btn-outline-custom mt-3" id="refreshReviews">Refresh reviews</button></div></div>
         </div>
-      </div>
-    </section>
-
-    <!-- Closing banner -->
-    <section class="closing-band">
-      <div class="container closing-inner">
-        <div>
-          <span class="section-kicker">READY WHEN YOU ARE</span>
-          <h2>Let's make your next trip <em>memorable.</em></h2>
-        </div>
-        <a href="#booking" class="btn btn-light btn-lg">Plan Your Journey ↗</a>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="row g-4">
-        <div class="col-12 col-md-6">
-          <a class="footer-brand brand" href="#home">
-            <span class="brand-mark">ST</span>
-            <span>SHIVANSH<small>TOUR &amp; TRAVELS</small></span>
-          </a>
-          <p class="footer-description">Reliable travel services for airport transfers, city tours and outstation journeys.</p>
-        </div>
-        <div class="col-6 col-md-3">
-          <h4>Explore</h4>
-          <a href="#services">Our Services</a>
-          <a href="#fleet">Our Cars</a>
-          <a href="#packages">Travel Plans</a>
-        </div>
-        <div class="col-6 col-md-3">
-          <h4>Get Started</h4>
-          <a href="#booking">Book a Ride</a>
-          <a href="#home">Back to Top ↑</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>© <span id="year"></span> Shivansh Tour &amp; Travels. All rights reserved.</span>
-        <span>Travel comfortably. Travel confidently.</span>
-      </div>
-    </div>
-  </footer>
+  <section class="closing-banner"><div class="container"><div><span class="eyebrow">READY WHEN YOU ARE</span><h2>Your next trip starts <em>here.</em></h2></div><a href="#booking" class="btn btn-light btn-lg">Send an enquiry →</a></div></section>
+  <footer class="site-footer"><div class="container footer-inner"><a class="navbar-brand brand brand-footer" href="#home"><span class="brand-mark">ST</span><span>Shivansh <small>Tour & Travels</small></span></a><p>Comfortable journeys, thoughtful service.</p><span>© <span id="year"></span> Shivansh Tour & Travels. All rights reserved.</span></div></footer>
 
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
