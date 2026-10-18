@@ -432,11 +432,32 @@ textarea.form-control { resize: vertical; }
 .fleet-section { background: #f6f8fb; }
 .car-card { height: 100%; border: 1px solid var(--border); background: white; border-radius: 14px; overflow: hidden; transition: .3s; }
 .car-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
-.car-photo { height: 190px; background-position: center; background-size: cover; background-color: #e9edf2; }
-.wagonr-photo { background-image: url("https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80"); }
-.ertiga-photo { background-image: url("https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=700&q=80"); }
-.innova-photo { background-image: url("https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=700&q=80"); }
-.crysta-photo { background-image: url("https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=700&q=80"); }
+
+
+/* Existing car-card design stays unchanged */
+.car-photo {
+  height: 190px;
+  background-position: center;
+  background-size: cover;
+  background-color: #e9edf2;
+}
+
+/* Replace the old wagonr-photo rule */
+.sedan-photo {
+  background-image: url("images/sedan.jpeg");
+}
+
+.ertiga-photo {
+  background-image: url("images/ertiga.jpeg");
+}
+
+.innova-photo {
+  background-image: url("images/innova.jpeg");
+}
+
+.crysta-photo {
+  background-image: url("images/innova-crysta.jpeg");
+}
 .car-info { padding: 20px; }
 .car-title { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .car-title h3 { font-size: 19px; font-weight: 800; margin: 0; }
@@ -464,6 +485,54 @@ textarea.form-control { resize: vertical; }
 .reviews-section .section-heading p { color: #b9c8d7; }
 .review-placeholder { padding: 28px; text-align: center; color: #c7d2de; border: 1px solid rgba(255,255,255,.16); border-radius: 12px; }
 .reviews-list > * { min-width: 0; }
+
+
+
+/* Review cards: match the existing navy-and-gold theme */
+.review-card {
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .06);
+}
+
+.review-card-body {
+  padding: 25px;
+}
+
+.review-stars {
+  color: var(--gold);
+  font-size: 18px;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+}
+
+.review-feedback {
+  color: #e2eaf2;
+  font-size: 14px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.review-route {
+  color: #b9c8d7;
+  font-size: 12px;
+  margin: 12px 0;
+}
+
+.review-name {
+  color: white;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.review-details {
+  color: #b9c8d7;
+  font-size: 11px;
+  margin-bottom: 0;
+}
 
 .feedback-section { background: #f6f8fb; }
 .feedback-card { background: white; padding: clamp(24px, 5vw, 55px); border-radius: 18px; box-shadow: var(--shadow); }

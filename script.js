@@ -1,94 +1,196 @@
+
 $(document).ready(function () {
-  // Existing deployed Google Apps Script Web App URL.
-  const googleScriptURL = "https://script.google.com/macros/s/AKfycbzsFYTTjdu1k1S0DOYpsGNs1yQkH1Tla3g7ajj3F2MY1802iFAL5OSHx5T0sIkW0u31MQ/exec";
+  const googleScriptURL =
+    "https://script.google.com/macros/s/AKfycbzsFYTTjdu1k1S0DOYpsGNs1yQkH1Tla3g7ajj3F2MY1802iFAL5OSHx5T0sIkW0u31MQ/exec";
 
-  $("#year").text(new Date().getFullYear());
+  const carCapacity = {
+    "Sedan": 4,
+    "Ertiga": 6,
+    "Innova": 6,
+    "Innova Crysta": 8
+  };
 
-  function localDateString() {
+  const $car = $("#car");
+  const $passengers = $("#passengers");
+  const $bookingForm = $("#bookingForm");
+  const $feedbackForm = $("#feedbackForm");
+  const $bookingStatus = $("#bookingStatus");
+  const $feedbackStatus = $("#feedbackStatus");
+  const $reviewsList = $("#reviewsList");
+
+  // Use the local date, avoiding UTC date shifts.
+  function getLocalDate() {
     const now = new Date();
-    return new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-      .toISOString().split("T")[0];
-  }
-  const today = localDateString();
-  $("#travelDate, #reviewDate").attr("min", today);
-
-  function showStatus(selector, message, type) {
-    $(selector).removeClass("success error").addClass(type).text(message);
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   }
 
-  $(".choose-car").on("click", function () {
-    $("#car").val($(this).data("car"));
-    $("#service").val("Airport Drop & Pickup");
-    document.getElementById("booking").scrollIntoView({ behavior: "smooth" });
+  $("#currentYear").text(new Date().getFullYear());
+
+  $("#travelDate").attr("min", getLocalDate());
+  $("#reviewDate").attr("max", getLocalDate());
+
+  // Passenger options depend on the selected car.
+  function updatePassengerOptions(selectedValue) {
+    const carName = $car.val();
+    const capacity = carCapacity[carName];
+
+    $passengers.empty();
+
+    if (!capacity) {
+      $passengers
+        .append(new Option("Select car first", ""))
+        .prop("disabled", true)
+        .val("");
+      return;
+    }
+
+    $passengers.append(new Option("Select passengers", ""));
+
+    for (let i = 1; i <= capacity; i++) {
+      $passengers.append(new Option(String(i), String(i)));
+    }
+
+    $passengers.prop("disabled", false);
+
+    if (
+      selectedValue &&
+      Number(selectedValue) >= 1 &&
+      Number(selectedValue) <= capacity
+    ) {
+      $passengers.val(String(selectedValue));
+    } else {
+      $passengers.val("");
+    }
+  }
+
+  $car.on("change", function () {
+    updatePassengerOptions("");
   });
 
-  $("[data-service]").on("click", function (event) {
-    const service = $(this).data("service");
-    if (service) $("#service").val(service);
-  });
+  // Initialize passenger dropdown on page load.
+  updatePassengerOptions("");
 
+  // Clicking a service or car card scrolls to booking.
   $("[data-scroll-booking]").on("click", function () {
-    $("#service").val($(this).data("service") || "Airport Drop & Pickup");
-    document.getElementById("booking").scrollIntoView({ behavior: "smooth" });
+    const service = $(this).attr("data-service");
+    const selectedCar = $(this).attr("data-car");
+
+    if (service) {
+      $("#service").val(service);
+    }
+
+    if (selectedCar && carCapacity[selectedCar]) {
+      $car.val(selectedCar);
+      updatePassengerOptions("");
+    }
+
+    $("#booking")[0].scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
   });
 
-  $("[data-route]").on("click", function () {
-    $("#service").val("Outstation Trip");
-    $("#destination").val($(this).data("route"));
-    document.getElementById("booking").scrollIntoView({ behavior: "smooth" });
-  });
-
-  $("#bookingForm").on("submit", function (event) {
+  // Booking form submission.
+  $bookingForm.on("submit", async function (event) {
     event.preventDefault();
-    const form = this;
-    if (!form.checkValidity()) {
-      form.reportValidity();
+
+    const carName = $car.val();
+    const passengerCount = Number($passengers.val());
+    const capacity = carCapacity[carName];
+
+    if (!capacity || passengerCount < 1 || passengerCount > capacity) {
+      $bookingStatus
+        .text("Please select a car and a valid passenger count.")
+        .css("color", "#b42318");
+      return;
+    }
+
+    const phone = $("#phone").val().trim();
+
+    if (!/^[0-9]{10}$/.test(phone)) {
+      $bookingStatus
+        .text("Please enter a valid 10-digit mobile number.")
+        .css("color", "#b42318");
       return;
     }
 
     const booking = {
       type: "booking",
       name: $("#fullName").val().trim(),
-      phone: $("#phone").val().trim(),
+      phone: phone,
       service: $("#service").val(),
-      car: $("#car").val() || "Any suitable car",
+      car: carName,
       travelDate: $("#travelDate").val(),
-      passengers: $("#passengers").val(),
+      passengers: passengerCount,
       pickup: $("#pickup").val().trim(),
       destination: $("#destination").val().trim(),
-      message: $("#notes").val().trim() || "None"
+      message: $("#notes").val().trim()
     };
 
-    const submitButton = $(form).find('button[type="submit"]');
-    submitButton.prop("disabled", true).text("Submitting...");
-    showStatus("#bookingStatus", "", "");
+    const $submitButton = $bookingForm.find('button[type="submit"]');
+    $submitButton.prop("disabled", true).text("Submitting...");
+    $bookingStatus
+      .text("Submitting your booking request...")
+      .css("color", "#536579");
 
-    fetch(googleScriptURL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(booking)
-    }).then(function () {
-      // With no-cors, the browser cannot read the server response.
-      // This confirms the request was sent, not that the sheet write was verified.
-      showStatus("#bookingStatus", "Your enquiry was sent. The team will contact you to confirm the details.", "success");
-      form.reset();
-      $("#travelDate").attr("min", localDateString());
-    }).catch(function (error) {
+    try {
+      // no-cors prevents reading the server response.
+      // A resolved fetch does not confirm that the sheet was updated.
+      await fetch(googleScriptURL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(booking)
+      });
+
+      $bookingStatus
+        .text(
+          "Your request has been sent.  "
+        )
+        .css("color", "#18794e");
+
+      $bookingForm[0].reset();
+      updatePassengerOptions("");
+      $("#travelDate").attr("min", getLocalDate());
+    } catch (error) {
       console.error("Booking submission error:", error);
-      showStatus("#bookingStatus", "Could not send the enquiry. Please check your connection and try again.", "error");
-    }).finally(function () {
-      submitButton.prop("disabled", false).html('Submit booking enquiry <span aria-hidden="true">→</span>');
-    });
+      $bookingStatus
+        .text("Unable to send the request. Please try again.")
+        .css("color", "#b42318");
+    } finally {
+      $submitButton.prop("disabled", false).html(
+        'Request a Booking <span>→</span>'
+      );
+    }
   });
 
-  $("#feedbackForm").on("submit", function (event) {
+  
+
+  // Feedback submission.
+  $feedbackForm.on("submit", async function (event) {
     event.preventDefault();
-    const form = this;
-    if (!form.checkValidity()) {
-      form.reportValidity();
+
+    const driverRating = Number($("#driverRating").val());
+    const safetyRating = Number($("#safetyRating").val());
+    const cleanlinessRating = Number($("#cleanlinessRating").val());
+
+    // Validate all 3 available ratings.
+    if (!driverRating || !safetyRating || !cleanlinessRating) {
+      $feedbackStatus
+        .text("Please select all 3 ratings.")
+        .css("color", "#b42318");
       return;
     }
+
+    // Calculate overall rating from the 3 ratings.
+    const overallRating = Math.round(
+      (driverRating + safetyRating + cleanlinessRating) / 3
+    );
 
     const feedback = {
       type: "feedback",
@@ -96,81 +198,151 @@ $(document).ready(function () {
       travelDate: $("#reviewDate").val(),
       route: $("#reviewRoute").val().trim(),
       car: $("#reviewCar").val(),
-      driverRating: $("#driverRating").val(),
-      safetyRating: $("#safetyRating").val(),
-      punctualityRating: $("#punctualityRating").val(),
-      cleanlinessRating: $("#cleanlinessRating").val(),
-      overallRating: $("#overallRating").val(),
+      driverRating: driverRating,
+      safetyRating: safetyRating,
+      cleanlinessRating: cleanlinessRating,
+      overallRating: overallRating,
       feedback: $("#reviewText").val().trim()
     };
 
-    const submitButton = $(form).find('button[type="submit"]');
-    submitButton.prop("disabled", true).text("Submitting...");
-    showStatus("#feedbackStatus", "", "");
+    const $submitButton = $feedbackForm.find('button[type="submit"]');
 
-    fetch(googleScriptURL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(feedback)
-    }).then(function () {
-      showStatus("#feedbackStatus", "Thank you! Your feedback was sent for review. It will appear publicly only after approval.", "success");
-      form.reset();
-      $("#reviewDate").attr("min", localDateString());
-    }).catch(function (error) {
+    $submitButton.prop("disabled", true).text("Submitting...");
+    $feedbackStatus
+      .text("Submitting your feedback...")
+      .css("color", "#536579");
+
+    try {
+      await fetch(googleScriptURL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(feedback)
+      });
+
+      $feedbackStatus
+        .text("Thank you! Your feedback has been sent.")
+        .css("color", "#18794e");
+
+      $feedbackForm[0].reset();
+      $("#reviewDate").attr("max", getLocalDate());
+
+    } catch (error) {
       console.error("Feedback submission error:", error);
-      showStatus("#feedbackStatus", "Could not send feedback. Please check your connection and try again.", "error");
-    }).finally(function () {
-      submitButton.prop("disabled", false).text("Submit feedback");
-    });
+
+      $feedbackStatus
+        .text("Unable to send feedback. Please try again.")
+        .css("color", "#b42318");
+
+    } finally {
+      $submitButton
+        .prop("disabled", false)
+        .text("Submit Feedback ↗");
+    }
   });
 
-  function escapeHtml(value) {
-    return String(value == null ? "" : value).replace(/[&<>"']/g, function (char) {
-      return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char];
-    });
-  }
-
+  // Safely display approved reviews as text.
   function renderReviews(reviews) {
-    const container = $("#reviewsList");
-    if (!Array.isArray(reviews) || reviews.length === 0) {
-      container.html('<div class="empty-reviews"><span>✦</span><h4>No approved reviews yet</h4><p>When the owner approves genuine customer feedback, it will appear here.</p></div>');
+    $reviewsList.empty();
+
+    if (!Array.isArray(reviews)) {
+      $reviewsList.html(
+        '<div class="col-12"><div class="review-placeholder">Reviews are temporarily unavailable. Please try again later.</div></div>'
+      );
       return;
     }
 
-    container.empty();
-    reviews.forEach(function (review) {
-      const rating = Math.max(1, Math.min(5, Number(review.overallRating) || 0));
-      const stars = "★".repeat(rating) + "☆".repeat(5 - rating);
-      const dateText = review.travelDate ? escapeHtml(review.travelDate) : "";
-      const meta = [escapeHtml(review.route || ""), escapeHtml(review.car || ""), dateText].filter(Boolean).join(" · ");
-      container.append(
-        '<article class="review-item">' +
-          '<div class="review-item-top"><div><h4>' + escapeHtml(review.name || "Customer") + '</h4><div class="review-meta">' + meta + '</div></div>' +
-          '<span class="review-stars" aria-label="' + rating + ' out of 5 stars">' + stars + '</span></div>' +
-          '<p>' + escapeHtml(review.feedback || "") + '</p>' +
-        '</article>'
+    const validReviews = reviews.filter(function (review) {
+      return review && review.name && review.feedback;
+    });
+
+    if (validReviews.length === 0) {
+      $reviewsList.html(
+        '<div class="col-12"><div class="review-placeholder">No approved reviews yet. Be the first to share your experience!</div></div>'
       );
+      return;
+    }
+
+    validReviews.forEach(function (review) {
+      const rating = Math.max(
+        0,
+        Math.min(5, Number(review.overallRating) || 0)
+      );
+
+      const $column = $("<div>").addClass("col-md-6 col-lg-4");
+      const $card = $("<article>").addClass("review-card");
+      const $body = $("<div>").addClass("review-card-body");
+      const $stars = $("<div>")
+        .addClass("review-stars")
+        .attr("aria-label", rating + " out of 5 stars")
+        .text("★".repeat(rating) + "☆".repeat(5 - rating));
+
+      const $feedback = $("<p>").addClass("review-feedback").text(
+        String(review.feedback)
+      );
+
+      const $route = $("<p>").addClass("review-route").text(
+        String(review.route || "")
+      );
+
+      const $name = $("<h3>").addClass("review-name").text(
+        String(review.name)
+      );
+
+      const details = [review.car, review.travelDate]
+        .filter(Boolean)
+        .join(" · ");
+
+      const $details = $("<p>").addClass("review-details").text(details);
+
+      $body.append($stars, $feedback, $route, $name, $details);
+      $card.append($body);
+      $column.append($card);
+      $reviewsList.append($column);
     });
   }
 
-  function loadReviews() {
-    $("#refreshReviews").prop("disabled", true).text("Loading...");
-    fetch(googleScriptURL + "?action=approvedReviews", { method: "GET" })
-      .then(function (response) {
-        if (!response.ok) throw new Error("Review request failed");
-        return response.json();
-      })
-      .then(renderReviews)
-      .catch(function (error) {
-        console.warn("Could not load approved reviews:", error);
-        $("#reviewsList").html('<div class="empty-reviews"><span>✦</span><h4>Reviews are temporarily unavailable</h4><p>Please try refreshing later. You can still submit your feedback using the form.</p></div>');
-      })
-      .finally(function () {
-        $("#refreshReviews").prop("disabled", false).text("Refresh reviews");
-      });
+  // Fetch approved reviews from Apps Script.
+  async function loadReviews() {
+    const $refreshButton = $("#refreshReviews");
+
+    $refreshButton.prop("disabled", true);
+
+    $reviewsList.html(
+      '<div class="col-12"><div class="review-placeholder">Loading approved reviews...</div></div>'
+    );
+
+    try {
+      const response = await fetch(
+        googleScriptURL + "?action=approvedReviews",
+        { method: "GET", cache: "no-store" }
+      );
+
+      if (!response.ok) {
+        throw new Error("HTTP error: " + response.status);
+      }
+
+      const result = await response.json();
+
+      if (!Array.isArray(result)) {
+        throw new Error(result.error || "Unexpected reviews response.");
+      }
+
+      renderReviews(result);
+    } catch (error) {
+      console.error("Loading reviews failed:", error);
+
+      $reviewsList.html(
+        '<div class="col-12"><div class="review-placeholder">Could not load reviews right now. Check the Apps Script deployment and try Refresh Reviews.</div></div>'
+      );
+    } finally {
+      $refreshButton.prop("disabled", false);
+    }
   }
 
   $("#refreshReviews").on("click", loadReviews);
+
   loadReviews();
 });

@@ -1,153 +1,324 @@
-const OWNER_EMAIL = "kirandhumal890@gmail.com";
-const BOOKING_SHEET = "Bookings";
-const FEEDBACK_SHEET = "Feedback";
+
+const FEEDBACK_SPREADSHEET_ID = "1rgXs_-n3EzlRnR00-GDuejuvO_oJqve3NHW5hIY7oI0";
+const OWNER_EMAIL = "Shivanshtoursandtravels5675@gmail.com";
+
+const FEEDBACK_HEADERS = [
+  "Feedback ID",
+  "Feedback Date",
+  "Customer Name",
+  "Travel Date",
+  "Route",
+  "Car Type",
+  "Driver Rating",
+  "Safety Rating",
+  "Punctuality Rating",
+  "Cleanliness Rating",
+  "Overall Rating",
+  "Feedback",
+  "Approved"
+];
+
+const BOOKING_HEADERS = [
+  "Booking ID",
+  "Booking Date",
+  "Customer Name",
+  "Phone Number",
+  "Service",
+  "Car Type",
+  "Travel Date",
+  "Passengers",
+  "Pickup Location",
+  "Destination",
+  "Message"
+];
 
 function doPost(e) {
   try {
-    const payload = JSON.parse((e && e.postData && e.postData.contents) || "{}");
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-
-    if (payload.type === "feedback") {
-      saveFeedback_(ss, payload);
-      sendFeedbackEmail_(payload);
-      return jsonOutput_({ success: true, message: "Feedback received for review." });
+    if (!e || !e.postData || !e.postData.contents) {
+      throw new Error("Request data is missing.");
     }
 
-    saveBooking_(ss, payload);
-    sendBookingEmail_(payload);
-    return jsonOutput_({ success: true, message: "Booking enquiry received." });
+    const data = JSON.parse(e.postData.contents);
+    const type = String(data.type || "").trim().toLowerCase();
+
+    if (type === "feedback") {
+      return saveFeedback(data);
+    }
+
+    if (type === "booking") {
+      return saveBooking(data);
+    }
+
+    throw new Error("Invalid request type.");
   } catch (error) {
-    console.error(error);
-    return jsonOutput_({ success: false, message: String(error) });
+    return jsonResponse({
+      success: false,
+      error: String(error.message || error)
+    });
   }
+}
+
+function saveFeedback(data) {
+  const ss = SpreadsheetApp.openById(FEEDBACK_SPREADSHEET_ID);
+  const sheet = ss.getSheets()[0];
+
+  ensureHeaders(sheet, FEEDBACK_HEADERS);
+
+  const feedbackId = "FDB-" + Date.now();
+
+  const rowData = {
+    "Feedback ID": feedbackId,
+    "Feedback Date": new Date(),
+    "Customer Name": data.name || "",
+    "Travel Date": data.travelDate || "",
+    "Route": data.route || "",
+    "Car Type": data.car || "",
+    "Driver Rating": data.driverRating || "",
+    "Safety Rating": data.safetyRating || "",
+    "Punctuality Rating": data.punctualityRating || "",
+    "Cleanliness Rating": data.cleanlinessRating || "",
+    "Overall Rating": data.overallRating || "",
+    "Feedback": data.feedback || "",
+    "Approved": "No"
+  };
+
+  appendByHeaders(sheet, rowData);
+
+  return jsonResponse({
+    success: true,
+    type: "feedback",
+    feedbackId: feedbackId,
+    message: "Feedback submitted for approval."
+  });
+}
+
+function saveBooking(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  if (!ss) {
+    throw new Error(
+      "Booking spreadsheet not found. Check which spreadsheet this script is attached to."
+    );
+  }
+
+  const sheet = ss.getSheets()[0];
+  ensureHeaders(sheet, BOOKING_HEADERS);
+
+  const bookingId = "STT-" + Date.now();
+  const bookingDate = new Date();
+
+  const rowData = {
+    "Booking ID": bookingId,
+    "Booking Date": bookingDate,
+    "Customer Name": data.name || "",
+    "Phone Number": String(data.phone || ""),
+    "Service": data.service || "",
+    "Car Type": data.car || "",
+    "Travel Date": data.travelDate || "",
+    "Passengers": data.passengers || "",
+    "Pickup Location": data.pickup || "",
+    "Destination": data.destination || "",
+    "Message": data.message || ""
+  };
+
+  appendByHeaders(sheet, rowData);
+
+  try {
+    MailApp.sendEmail({
+      to: OWNER_EMAIL,
+      subject: "New Tour & Travels Booking - " + bookingId,
+      body:
+        "New booking received!\n\n" +
+        "Booking ID: " + bookingId + "\n" +
+        "Name: " + (data.name || "") + "\n" +
+        "Phone: " + (data.phone || "") + "\n" +
+        "Service: " + (data.service || "") + "\n" +
+        "Car: " + (data.car || "") + "\n" +
+        "Travel Date: " + (data.travelDate || "") + "\n" +
+        "Passengers: " + (data.passengers || "") + "\n" +
+        "Pickup: " + (data.pickup || "") + "\n" +
+        "Destination: " + (data.destination || "") + "\n" +
+        "Message: " + (data.message || "")
+    });
+  } catch (emailError) {
+    console.error("Booking saved, but email failed: " + emailError.message);
+  }
+
+  return jsonResponse({
+    success: true,
+    type: "booking",
+    bookingId: bookingId,
+    message: "Booking saved."
+  });
 }
 
 function doGet(e) {
-  const action = e && e.parameter ? e.parameter.action : "";
-  if (action !== "approvedReviews") {
-    return jsonOutput_({ success: true, message: "Shivansh Tour & Travels endpoint is running." });
-  }
+  try {
+    const action = e && e.parameter ? e.parameter.action : "";
 
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = getOrCreateSheet_(ss, FEEDBACK_SHEET, [
-    "Timestamp", "Customer Name", "Travel Date", "Route", "Car",
-    "Driver Behaviour Rating", "Safe Driving Rating", "Punctuality Rating",
-    "Cleanliness Rating", "Overall Rating", "Feedback", "Status"
-  ]);
-  const values = sheet.getDataRange().getValues();
-  if (values.length < 2) return jsonOutput_([]);
+    if (action !== "approvedReviews") {
+      return jsonResponse({
+        success: true,
+        message: "Shivansh Tour & Travels API is running."
+      });
+    }
 
-  const headers = values[0].map(String);
-  const index = {};
-  headers.forEach(function (header, i) { index[header] = i; });
+    const ss = SpreadsheetApp.openById(FEEDBACK_SPREADSHEET_ID);
+    const sheet = ss.getSheets()[0];
+    const values = sheet.getDataRange().getValues();
 
-  const reviews = [];
-  for (let i = 1; i < values.length; i++) {
-    const row = values[i];
-    if (String(row[index.Status] || "").trim().toLowerCase() !== "approved") continue;
-    reviews.push({
-      name: row[index["Customer Name"]] || "Customer",
-      travelDate: row[index["Travel Date"]] || "",
-      route: row[index.Route] || "",
-      car: row[index.Car] || "",
-      overallRating: row[index["Overall Rating"]] || "",
-      feedback: row[index.Feedback] || ""
+    if (values.length < 2) {
+      return jsonResponse([]);
+    }
+
+    const headers = values[0].map(function (value) {
+      return String(value).trim();
+    });
+
+    const col = {};
+    headers.forEach(function (header, index) {
+      col[header] = index;
+    });
+
+    const required = [
+      "Customer Name",
+      "Travel Date",
+      "Route",
+      "Car Type",
+      "Overall Rating",
+      "Feedback",
+      "Approved"
+    ];
+
+    required.forEach(function (header) {
+      if (col[header] === undefined) {
+        throw new Error("Missing column header: " + header);
+      }
+    });
+
+    const reviews = values.slice(1)
+      .filter(function (row) {
+        return String(row[col["Approved"]]).trim().toLowerCase() === "yes";
+      })
+      .map(function (row) {
+        return {
+          name: String(row[col["Customer Name"]] || ""),
+          travelDate: formatDate(row[col["Travel Date"]]),
+          route: String(row[col["Route"]] || ""),
+          car: String(row[col["Car Type"]] || ""),
+          overallRating: Number(row[col["Overall Rating"]]) || 0,
+          feedback: String(row[col["Feedback"]] || "")
+        };
+      })
+      .filter(function (review) {
+        return review.name && review.feedback;
+      });
+
+    return jsonResponse(reviews);
+  } catch (error) {
+    console.error(error);
+    return jsonResponse({
+      success: false,
+      error: String(error.message || error)
     });
   }
-  reviews.reverse();
-  return jsonOutput_(reviews);
 }
 
-function saveBooking_(ss, p) {
-  const headers = [
-    "Timestamp", "Booking ID", "Customer Name", "Phone Number", "Service",
-    "Car Type", "Travel Date", "Passengers", "Pickup Location", "Destination", "Message"
-  ];
-  const sheet = getOrCreateSheet_(ss, BOOKING_SHEET, headers);
-  const bookingId = "STT-" + new Date().getTime();
-  sheet.appendRow([
-    new Date(), bookingId, safe_(p.name), safe_(p.phone), safe_(p.service),
-    safe_(p.car), safe_(p.travelDate), safe_(p.passengers), safe_(p.pickup),
-    safe_(p.destination), safe_(p.message)
-  ]);
-}
-
-function saveFeedback_(ss, p) {
-  const headers = [
-    "Timestamp", "Customer Name", "Travel Date", "Route", "Car",
-    "Driver Behaviour Rating", "Safe Driving Rating", "Punctuality Rating",
-    "Cleanliness Rating", "Overall Rating", "Feedback", "Status"
-  ];
-  const sheet = getOrCreateSheet_(ss, FEEDBACK_SHEET, headers);
-  sheet.appendRow([
-    new Date(), safe_(p.name), safe_(p.travelDate), safe_(p.route), safe_(p.car),
-    rating_(p.driverRating), rating_(p.safetyRating), rating_(p.punctualityRating),
-    rating_(p.cleanlinessRating), rating_(p.overallRating), safe_(p.feedback), "Pending"
-  ]);
-}
-
-function getOrCreateSheet_(ss, name, headers) {
-  let sheet = ss.getSheetByName(name);
-  if (!sheet) sheet = ss.insertSheet(name);
+function ensureHeaders(sheet, expectedHeaders) {
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(headers);
+    sheet.getRange(1, 1, 1, expectedHeaders.length)
+      .setValues([expectedHeaders]);
     sheet.setFrozenRows(1);
+    return;
   }
-  return sheet;
+
+  const existingHeaders = sheet
+    .getRange(1, 1, 1, sheet.getLastColumn())
+    .getDisplayValues()[0]
+    .map(function (value) {
+      return String(value).trim();
+    });
+
+  const missing = expectedHeaders.filter(function (header) {
+    return existingHeaders.indexOf(header) === -1;
+  });
+
+  if (missing.length > 0) {
+    throw new Error(
+      "Spreadsheet is missing these column headers: " + missing.join(", ")
+    );
+  }
 }
 
-function sendBookingEmail_(p) {
-  const subject = "New booking enquiry - " + safe_(p.name);
-  const body = [
-    "A new booking enquiry was submitted on the website.",
-    "",
-    "Name: " + safe_(p.name),
-    "Phone: " + safe_(p.phone),
-    "Service: " + safe_(p.service),
-    "Car: " + safe_(p.car),
-    "Travel date: " + safe_(p.travelDate),
-    "Passengers: " + safe_(p.passengers),
-    "Pickup: " + safe_(p.pickup),
-    "Destination: " + safe_(p.destination),
-    "Additional details: " + safe_(p.message)
-  ].join("\n");
-  MailApp.sendEmail(OWNER_EMAIL, subject, body);
+function appendByHeaders(sheet, rowData) {
+  const headers = sheet
+    .getRange(1, 1, 1, sheet.getLastColumn())
+    .getDisplayValues()[0]
+    .map(function (value) {
+      return String(value).trim();
+    });
+
+  const row = headers.map(function (header) {
+    return Object.prototype.hasOwnProperty.call(rowData, header)
+      ? rowData[header]
+      : "";
+  });
+
+  sheet.appendRow(row);
 }
 
-function sendFeedbackEmail_(p) {
-  const subject = "New customer feedback awaiting approval - " + safe_(p.name);
-  const body = [
-    "A customer submitted feedback. It is saved with Status = Pending.",
-    "Review it in the Feedback sheet and change Status to Approved to display it on the website.",
-    "",
-    "Name: " + safe_(p.name),
-    "Travel date: " + safe_(p.travelDate),
-    "Route: " + safe_(p.route),
-    "Car: " + safe_(p.car),
-    "Driver behaviour: " + rating_(p.driverRating) + "/5",
-    "Safe driving: " + rating_(p.safetyRating) + "/5",
-    "Punctuality: " + rating_(p.punctualityRating) + "/5",
-    "Cleanliness: " + rating_(p.cleanlinessRating) + "/5",
-    "Overall: " + rating_(p.overallRating) + "/5",
-    "",
-    "Feedback:",
-    safe_(p.feedback)
-  ].join("\n");
-  MailApp.sendEmail(OWNER_EMAIL, subject, body);
+
+function formatDate(value) {
+  if (!value) return "";
+
+  // Handle actual Google Sheets Date values.
+  if (value instanceof Date && !isNaN(value.getTime())) {
+    return Utilities.formatDate(
+      value,
+      "Asia/Kolkata",
+      "dd MMM yyyy"
+    );
+  }
+
+  const text = String(value).trim();
+
+  // Handle date strings such as:
+  // Thu Oct 08 2026 00:00:00 GMT+0530 (India Standard Time)
+  const longDateMatch = text.match(
+    /^[A-Za-z]{3}\s+([A-Za-z]{3})\s+(\d{1,2})\s+(\d{4})/
+  );
+
+  if (longDateMatch) {
+    const day = longDateMatch[2].padStart(2, "0");
+    const month = longDateMatch[1];
+    const year = longDateMatch[3];
+
+    return day + " " + month + " " + year;
+  }
+
+  // Handle dd/MM/yyyy.
+  const match = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+
+  if (match) {
+    const months = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
+    const month = Number(match[2]);
+
+    if (month >= 1 && month <= 12) {
+      return match[1].padStart(2, "0") +
+        " " + months[month - 1] + " " + match[3];
+    }
+  }
+
+  return text;
 }
 
-function rating_(value) {
-  const number = Number(value);
-  return Number.isInteger(number) && number >= 1 && number <= 5 ? number : "";
-}
 
-function safe_(value) {
-  // Prevent empty/undefined values and reduce the risk of spreadsheet formula injection.
-  const text = String(value == null ? "" : value).trim();
-  return /^[=+\-@]/.test(text) ? "'" + text : text;
-}
 
-function jsonOutput_(data) {
+function jsonResponse(data) {
   return ContentService
     .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
