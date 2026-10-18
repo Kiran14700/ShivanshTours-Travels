@@ -1,7 +1,9 @@
 
 $(document).ready(function () {
-  const googleScriptURL =
-    "https://script.google.com/macros/s/AKfycbzsFYTTjdu1k1S0DOYpsGNs1yQkH1Tla3g7ajj3F2MY1802iFAL5OSHx5T0sIkW0u31MQ/exec";
+  
+
+const googleScriptURL =
+  "https://script.google.com/macros/s/AKfycbxTW7H1Cuf7e-x6FeYdIAHhi843sf5Mbq11rszPf3jKUdibFG0r_McKF7bKEeuccrx2/exec";
 
   const carCapacity = {
     "Sedan": 4,
